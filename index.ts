@@ -1,4 +1,5 @@
 import express, { Express, Request, Response } from "express";
+import fetch from "node-fetch";
 import dotenv from "dotenv";
 import { readFileSync, writeFileSync } from "fs";
 dotenv.config();
@@ -19,6 +20,7 @@ app.post("/login", async (_, res: Response) => {
   }
 
   const response = await fetch(`${URL}/api/auth/login`, {
+    method: "POST",
     headers: {
       "Content-Type": "application/json",
       Accept: "*/*",
@@ -64,6 +66,7 @@ async function submitSavedFlags() {
   }
 
   const response = await fetch(`${URL}/api/flags`, {
+    method: "POST",
     headers: {
       "Content-Type": "application/json",
       Accept: "*/*",
@@ -78,7 +81,7 @@ async function submitSavedFlags() {
   }
 
   console.log("Submitted flags");
-  const flagResponse = await response.json();
+  const flagResponse = (await response.json()) as any;
   if (!flagResponse?.data?.length) {
     console.error("Recieved unexpected: ", flagResponse);
     return;
